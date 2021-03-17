@@ -1,4 +1,4 @@
-package com.silin.currencycource;
+package com.silin.currencycourse;
 
 
 import android.app.Dialog;
