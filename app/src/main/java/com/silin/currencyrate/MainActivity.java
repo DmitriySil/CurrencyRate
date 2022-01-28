@@ -1,7 +1,8 @@
-package com.silin.currencycourse;
+package com.silin.currencyrate;
 
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -35,11 +36,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         result = findViewById(R.id.result);
+
+        SharedPreferences save = getSharedPreferences("Save", MODE_PRIVATE);
+        if (save.contains("Save")) {
+            result.setText(save.getString("Save", ""));
+        }
+
         Button buttonParse = findViewById(R.id.btn_show);
         Button buttonConvert = findViewById(R.id.btn_convert);
         mQueue = Volley.newRequestQueue(this);
         buttonParse.setOnClickListener(v -> {
-            showValuteCource();
+            showCurrencyRate();
         });
         buttonConvert.setOnClickListener(v -> {
             dialog = new Dialog(this);
@@ -69,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             Button btnConvertValute = (Button) dialog.findViewById(R.id.btn_convert_valute);
             btnConvertValute.setOnClickListener(v1 -> {
                 String url = "https://www.cbr-xml-daily.ru/latest.js";
+
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                         response -> {
                             try {
@@ -97,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showValuteCource() {
+    private void showCurrencyRate() {
         result.setText("");
         String url = "https://www.cbr-xml-daily.ru/daily_json.js";
         String[] valuteArray = new String[]{"USD", "EUR", "AUD", "AZN", "GBP", "AMD", "BYN", "BGN", "BRL", "HUF", "HKD", "DKK"};
@@ -105,22 +113,23 @@ public class MainActivity extends AppCompatActivity {
                 response -> {
                     try {
                         JSONObject jsonObject = response.getJSONObject("Valute");
-                        for (int i = 0; i < valuteArray.length; i++) {
-                            JSONObject valuteCode = jsonObject.getJSONObject(valuteArray[i]);
+                        for (String s : valuteArray) {
+                            JSONObject valuteCode = jsonObject.getJSONObject(s);
                             String name = valuteCode.getString("Name");
                             String value = valuteCode.getString("Value");
                             String charCode = valuteCode.getString("CharCode");
                             result.append(charCode + " " + name + " " + value + " " + "\n\n");
+                            //Save
+                            SharedPreferences save = getSharedPreferences("Save", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = save.edit();
+                            String saveRate = result.getText().toString();
+                            editor.putString("Save", saveRate);
+                            editor.apply();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+                }, Throwable::printStackTrace);
         mQueue.add(request);
     }
 }
