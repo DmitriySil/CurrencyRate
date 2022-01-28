@@ -42,14 +42,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Show Course" />
+                android:text="@string/show_rate" />
 
             <Button
                 android:id="@+id/btn_convert"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Converter" />
+                android:text="@string/converter" />
         </LinearLayout>
 
     </LinearLayout>

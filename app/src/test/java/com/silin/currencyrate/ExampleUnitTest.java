@@ -1,4 +1,4 @@
-package com.silin.currencycourse;
+package com.silin.currencyrate;
 
 import org.junit.Test;
 

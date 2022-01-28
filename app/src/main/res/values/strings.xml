@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">CurrencyCource</string>
+    <string name="app_name">CurrencyRate</string>
+    <string name="converter">Converter</string>
+    <string name="show_rate">Show rate</string>
+    <string name="rub">RUB</string>
+    <string name="usd">USD</string>
+    <string name="convert">convert</string>
+    <string name="close">close</string>
 </resources>
