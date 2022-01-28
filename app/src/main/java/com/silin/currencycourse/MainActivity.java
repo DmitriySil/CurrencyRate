@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView result;
     private RequestQueue mQueue;
     private Dialog dialog;
-    private final String[] currency = {"USD","EUR","AUD","AZN","GBP","AMD","BYN","BGN","BRL","HUF","HKD","DKK"};
+    private final String[] currency = {"USD", "EUR", "AUD", "AZN", "GBP", "AMD", "BYN", "BGN", "BRL", "HUF", "HKD", "DKK"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
             showValuteCource();
         });
         buttonConvert.setOnClickListener(v -> {
-                dialog = new Dialog(this);
-                dialog.setContentView(R.layout.convert_dialog);
-                dialog.show();
+            dialog = new Dialog(this);
+            dialog.setContentView(R.layout.convert_dialog);
+            dialog.show();
             TextView convertCurrency = (TextView) dialog.findViewById(R.id.convert_currency);
             Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currency);
@@ -51,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
             AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String item = (String)parent.getItemAtPosition(position);
+                    String item = (String) parent.getItemAtPosition(position);
                     convertCurrency.setText(item);
                 }
+
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                                 double rate = jsonObject.getDouble((String) convertCurrency.getText());
                                 Editable y = rubValue.getText();
                                 int a = Integer.parseInt(rubValue.getText().toString());
-                                double x = rate*a;
+                                double x = rate * a;
                                 convertValue.setText(String.valueOf(x));
 
                             } catch (JSONException e) {
@@ -86,16 +90,17 @@ public class MainActivity extends AppCompatActivity {
                 });
                 mQueue.add(request);
             });
-                Button closeConverter = (Button) dialog.findViewById(R.id.btn_close_converter);
-                closeConverter.setOnClickListener(v1 -> {
-                    dialog.dismiss();
-                });
+            Button closeConverter = (Button) dialog.findViewById(R.id.btn_close_converter);
+            closeConverter.setOnClickListener(v1 -> {
+                dialog.dismiss();
+            });
         });
     }
+
     private void showValuteCource() {
         result.setText("");
         String url = "https://www.cbr-xml-daily.ru/daily_json.js";
-        String[] valuteArray = new String[]{"USD","EUR","AUD","AZN","GBP","AMD","BYN","BGN","BRL","HUF","HKD","DKK"};
+        String[] valuteArray = new String[]{"USD", "EUR", "AUD", "AZN", "GBP", "AMD", "BYN", "BGN", "BRL", "HUF", "HKD", "DKK"};
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
@@ -105,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                             String name = valuteCode.getString("Name");
                             String value = valuteCode.getString("Value");
                             String charCode = valuteCode.getString("CharCode");
-                            result.append(charCode + " " + name + " " + value + " " +  "\n\n");
+                            result.append(charCode + " " + name + " " + value + " " + "\n\n");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
